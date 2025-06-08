@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:exif/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_exif_data/camera.dart';
 import 'package:image_exif_data/image_data.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -145,7 +146,33 @@ class _ExifDemoState extends State<ExifDemo> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  getImage(isGallery: false);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CameraPage(
+                        onImageClicked: (XFile? file) async {
+                          print("We got a file from camera: ${file?.path}");
+                          if (mounted) {
+                            setState(() {
+                              _image = file;
+                              _metadata = null;
+                            });
+                          }
+                          await readExifData();
+                          print("Metadata: $_metadata");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImageExifData(
+                                metadata: _metadata,
+                                image: _image,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  );
                 },
                 child: const Icon(
                   Icons.camera,
