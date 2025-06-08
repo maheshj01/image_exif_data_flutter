@@ -145,7 +145,8 @@ class _ExifDemoState extends State<ExifDemo> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  final status = await Permission.camera.request();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
