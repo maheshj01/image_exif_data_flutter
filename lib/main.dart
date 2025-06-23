@@ -46,16 +46,33 @@ class _ExifDemoState extends State<ExifDemo> {
   }
 
   Future<void> requestPermissions() async {
-    final status = await Permission.accessMediaLocation.request();
-    if (status.isGranted) {
+    Map<Permission, PermissionStatus> status =
+        await [Permission.accessMediaLocation, Permission.location].request();
+    if (status[Permission.accessMediaLocation]!.isGranted) {
       print("Media location access granted");
-    } else if (status.isDenied) {
+    } else {
       print("Media location access denied");
+    }
+
+    if (status[Permission.location]!.isGranted) {
+      print("Location access granted");
+    } else {
+      print("Location access denied");
+      await requestLocationPermission();
+    }
+  }
+
+  Future<void> requestLocationPermission() async {
+    final status = await Permission.location.request();
+    if (status.isGranted) {
+      print("Location access granted");
+    } else if (status.isDenied) {
+      print("Location access denied");
       // Optionally, you can show a dialog to inform the user about the denied permission
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text(
-              "Media location access denied. Please allow it in settings."),
+              "Location access denied. Please allow it in settings."),
           action: SnackBarAction(
             label: 'Settings',
             onPressed: () {
@@ -65,10 +82,10 @@ class _ExifDemoState extends State<ExifDemo> {
         ),
       );
     } else if (status.isPermanentlyDenied) {
-      print("Media location access permanently denied");
+      print("Location access permanently denied");
       openAppSettings();
     } else {
-      print("Media location access status: $status");
+      print("Location access status: $status");
     }
   }
 
