@@ -24,6 +24,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<!-- location permission -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Used to demonstrate location plugin</string>
+	<!-- camera permission -->
 	<key>NSCameraUsageDescription</key>
     <string>Used to demonstrate image picker plugin</string>
     <key>NSMicrophoneUsageDescription</key>
